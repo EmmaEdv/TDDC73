@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.emmaedv.tddc73_lab1" >
+
+    <application
+        android:allowBackup="true"
+        android:theme="@style/AppTheme">
+
+        <!-- Gui 1 XML -->
+        <activity
+            android:name=".Lab1_1"
+            android:label="@string/gui1">
+        </activity>
+
+        <!-- Gui 2 XML -->
+        <activity
+            android:name=".Lab1_2"
+            android:label="@string/gui2">
+        </activity>
+
+        <!-- Gui 3 XML -->
+        <activity
+            android:name=".Lab1_3"
+            android:label="@string/gui3">
+        </activity>
+
+        <!-- Gui 1 java -->
+        <activity
+            android:name=".Lab1_java1"
+            android:label="@string/gui1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Gui 2 java -->
+        <activity
+            android:name=".Lab1_java2"
+            android:label="@string/gui2">
+        </activity>
+
+        <!-- Gui 3 java -->
+        <activity
+            android:name=".Lab1_java3"
+            android:label="@string/gui3">
+        </activity>
+    </application>
+
+</manifest>
