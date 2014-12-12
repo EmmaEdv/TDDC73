@@ -1,31 +1,47 @@
 package com.example.emmaedv.tddc73_lab3;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import java.util.List;
 
 /**
  * Created by emmaedv on 12/12/14.
  */
 public class MyAdapter extends BaseAdapter {
     Context myContext;
-    String[] names;
+    //String[] names;
+    List<String> nm;
 
-    public MyAdapter(Context context, String[] stringArray){
+//    public MyAdapter(Context context, String[] stringArray){
+//        Log.e("MyAdapter", "MyAdapter");
+//        myContext = context;
+//        names = stringArray;
+//    }
+
+    public MyAdapter(Context context, List<String> stringArray){
+        Log.e("MyAdapter", "MyAdapter");
         myContext = context;
-        names = stringArray;
+        nm = stringArray;
     }
 
     @Override
-    public int getCount() {
+/*    public int getCount() {
         return names.length;
+    }*/
+    public int getCount() {
+        return nm.size();
     }
 
-    @Override
     //Hämta namn från resultatet i sökningen
+    @Override
     public Object getItem(int i) {
-        return names[i];
+        Log.e("MyAdapter","getItem");
+        //return names[i];
+        return nm.get(i);
     }
 
     @Override
@@ -33,10 +49,12 @@ public class MyAdapter extends BaseAdapter {
         return 0;
     }
 
-    @Override
     //Denna skapar varje nytt namn som finns i resultatet för sökningen
+    @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        ResultItem resItem = new ResultItem(myContext, names[i]);
+        Log.e("MyAdapter","getView");
+        //ResultItem resItem = new ResultItem(myContext, names[i]);
+        ResultItem resItem = new ResultItem(myContext, nm.get(i));
 
         return resItem;
     }
