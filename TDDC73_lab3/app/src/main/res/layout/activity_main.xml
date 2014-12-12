@@ -9,13 +9,28 @@
     android:orientation="vertical" >
 
     <EditText
-        android:id="@+id/searchTxt"
+        android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:text="search" />
 
+    <EditText
+        android:id="@+id/resultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="result" />
+
+    <EditText
+        android:id="@+id/pop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="result" />
+
     <Button
+        android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Check"

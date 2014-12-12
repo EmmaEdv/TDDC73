@@ -1,104 +1,143 @@
 package com.example.emmaedv.tddc73_lab3;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import twoberg.se.testthread.R;
+
 
 public class MainActivity extends Activity {
-    private LinearLayout linearLayout;
-    private InteractiveSearcher searchField;
+
+    EditText search;
+    EditText searchResult;
+    EditText pop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_main);
-
-        linearLayout = new LinearLayout(this);
-        searchField = new InteractiveSearcher(this);
-
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        linearLayout.setLayoutParams(layoutParams);
-
-        LinearLayout.LayoutParams searchFieldParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        linearLayout.addView(searchField, searchFieldParams);
-
-        setContentView(linearLayout);
-
-        //connectToNetwork(3, "Em");
+        setContentView(R.layout.activity_main);
+        searchResult = (EditText) findViewById(R.id.resultText);
+        search = (EditText) findViewById(R.id.editText);
+        pop = (EditText) findViewById(R.id.pop);
+        Button n = (Button) findViewById(R.id.button);
+        n.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadData();
+            }
+        });
     }
 
-    public String readJSONFeed(String URL) {
-        StringBuilder stringBuilder = new StringBuilder();
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(URL);
+    private void loadData() {
+        loadWithThread();
+        //loadWithAsync();
+    }
+
+    private void loadWithAsync() {
+        new NetWorker().execute();
+    }
+
+    private void loadWithThread(){
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String data = doNetworkCall();
+                //List<SuggestGetSet> new_suggestions = onPostExecute(data);
+                searchResult.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        searchResult.setText(data);
+                    }
+                });
+            }
+        });
+        t.start();
+    }
+
+    private String doNetworkCall(){
         try {
-            HttpResponse response = httpClient.execute(httpGet);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) {
-                HttpEntity entity = response.getEntity();
-                InputStream inputStream = entity.getContent();
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                inputStream.close();
-            } else {
-                Log.d("JSON", "Failed to download file");
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            EditText editText = (EditText) findViewById(R.id.editText);
+            HttpGet httpget = new HttpGet("http://flask-afteach.rhcloud.com/getnames/3/"+ editText.getText().toString());
+            HttpResponse response = null;
+            response = httpclient.execute(httpget);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            StringBuffer sb = new StringBuffer("");
+            String line = "";
+            String NL = System.getProperty("line.separator");
+            while ((line = in.readLine()) != null) {
+                sb.append(line + NL);
             }
-        } catch (Exception e) {
-            Log.d("readJSONFeed", e.getLocalizedMessage());
+            in.close();
+            String result = sb.toString();
+            return result;
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return stringBuilder.toString();
+        return "";
     }
 
-    private class ReadWeatherJSONFeedTask extends AsyncTask
-            <String, Void, String> {
-        protected String doInBackground(String... urls) {
-            return readJSONFeed(urls[0]);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.my, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
 
-        protected void onPostExecute(String result) {
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject weatherObservationItems =
-                        new JSONObject(jsonObject.getString("result"));
+        return super.onOptionsItemSelected(item);
+    }
 
-                Toast.makeText(getBaseContext(),
-                        weatherObservationItems.getString("id") +
-                                " - " + weatherObservationItems.getString("result"),
-                        Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Log.d("ReadWeatherJSONFeedTask", e.getLocalizedMessage());
-            }
+    private class NetWorker extends AsyncTask<Void,Void,String> {
+
+
+        @Override
+        protected String doInBackground(Void... params) {
+            return doNetworkCall();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            searchResult.setText(s);
         }
     }
 
-    public void btnGetWeather(View view) {
-        EditText searchText = (EditText) findViewById(R.id.searchTxt);
-
-        new ReadWeatherJSONFeedTask().execute(
-                "http://flask-afteach.rhcloud.com/getnames/3/" +
-                        searchText.getText().toString());
-    }
 }
