@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 public class Lab1_java1 extends Activity {
     RelativeLayout layout;
     Button theButton;
-    EditText textField, multiLineText;
+    EditText textField, multiLineText   ;
     RatingBar rating;
 
     @Override
