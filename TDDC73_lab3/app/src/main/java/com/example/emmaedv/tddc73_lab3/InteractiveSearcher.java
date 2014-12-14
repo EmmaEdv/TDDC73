@@ -30,6 +30,7 @@ public class InteractiveSearcher extends LinearLayout {
     EditText searchField;
     ListPopupWindow popList;
     int id = 0;
+    int lastShownId = 0;
     List<String> nameL = new ArrayList<String>();
     String[] namesList = new String[1000];
     Context context;
@@ -79,18 +80,20 @@ public class InteractiveSearcher extends LinearLayout {
             @Override
             public void run() {
                 final List<String> dataL = doNWCall(text, id);
-                //final String[] dataList = doNetworkCall(text, id);
-                //final MyAdapter myAdapter = new MyAdapter(context, dataList);
                 final MyAdapter myAdapter = new MyAdapter(context, dataL);
 
-                searchField.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        //Dessa bör köras i post pga de påverkar gui.
-                        popList.setAdapter(myAdapter);
-                        popList.show();
-                    }
-                });
+                if(id>lastShownId) {
+                    searchField.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Dessa bör köras i post pga de påverkar gui.
+                            popList.setAdapter(myAdapter);
+                            myAdapter.notifyDataSetChanged();
+                            popList.show();
+                            lastShownId = id;
+                        }
+                    });
+                }
             }
         });
         t.start();
@@ -131,43 +134,6 @@ public class InteractiveSearcher extends LinearLayout {
             e.printStackTrace();
         }
         return nameL;
-    }
-
-    private String[] doNetworkCall(String name, int id){
-        Log.e("InteractiveSearcher", "doNetworkCall");
-        try {
-            DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpGet httpget = new HttpGet("http://flask-afteach.rhcloud.com/getnames/"+id+"/"+name);
-            HttpResponse response = null;
-            response = httpclient.execute(httpget);
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            StringBuffer sb = new StringBuffer("");
-            String line = "";
-            String NL = System.getProperty("line.separator");
-            while ((line = in.readLine()) != null) {
-                sb.append(line + NL);
-            }
-            in.close();
-            String result = sb.toString();
-
-            try {
-                JSONObject jObj = new JSONObject(result);
-                JSONArray jArr = jObj.getJSONArray("result");
-
-                for(int i = 0; i<jArr.length(); i++){
-                    namesList[i] = jArr.get(i).toString();
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return namesList;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return namesList;
     }
 
 }

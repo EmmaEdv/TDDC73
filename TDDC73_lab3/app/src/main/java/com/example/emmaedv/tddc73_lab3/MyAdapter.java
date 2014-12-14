@@ -16,22 +16,12 @@ public class MyAdapter extends BaseAdapter {
     //String[] names;
     List<String> nm;
 
-//    public MyAdapter(Context context, String[] stringArray){
-//        Log.e("MyAdapter", "MyAdapter");
-//        myContext = context;
-//        names = stringArray;
-//    }
-
     public MyAdapter(Context context, List<String> stringArray){
         Log.e("MyAdapter", "MyAdapter");
         myContext = context;
         nm = stringArray;
     }
 
-    @Override
-/*    public int getCount() {
-        return names.length;
-    }*/
     public int getCount() {
         return nm.size();
     }
