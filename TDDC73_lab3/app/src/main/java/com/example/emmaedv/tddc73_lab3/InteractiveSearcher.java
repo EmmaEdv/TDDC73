@@ -4,10 +4,11 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListPopupWindow;
-import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -31,8 +32,6 @@ public class InteractiveSearcher extends LinearLayout {
     ListPopupWindow popList;
     int id = 0;
     int lastShownId = 0;
-    List<String> nameL = new ArrayList<String>();
-    String[] namesList = new String[1000];
     Context context;
 
     public InteractiveSearcher(Context theContext) {
@@ -44,6 +43,12 @@ public class InteractiveSearcher extends LinearLayout {
 
         popList = new ListPopupWindow(context);
         popList.setAnchorView(searchField);
+        popList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                searchField.setText(adapterView.getItemAtPosition(position).toString());
+            }
+        });
         //Listan behöver inte addas till view då den inte visas hela tiden. Istället kör vi "show" i run()
 
         addView(searchField);
@@ -57,7 +62,7 @@ public class InteractiveSearcher extends LinearLayout {
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            Log.e("InteractiveSearcher", "OnTextChanged");
+            //Log.e("InteractiveSearcher", "OnTextChanged");
             String text = charSequence.toString();
             id += 1;
             loadData(text, id);
@@ -70,7 +75,7 @@ public class InteractiveSearcher extends LinearLayout {
     };
 
     private void loadData(String text, int id) {
-        Log.e("InteractiveSearcher","loadData");
+        //Log.e("InteractiveSearcher","loadData");
         loadWithThread(text, id);
     }
 
@@ -79,21 +84,20 @@ public class InteractiveSearcher extends LinearLayout {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-                final List<String> dataL = doNWCall(text, id);
-                final MyAdapter myAdapter = new MyAdapter(context, dataL);
-
-                if(id>lastShownId) {
-                    searchField.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            //Dessa bör köras i post pga de påverkar gui.
-                            popList.setAdapter(myAdapter);
-                            myAdapter.notifyDataSetChanged();
-                            popList.show();
-                            lastShownId = id;
-                        }
-                    });
-                }
+            final List<String> dataL = doNWCall(text, id);
+            final MyAdapter myAdapter = new MyAdapter(context, dataL);
+            if(id>lastShownId) {
+                searchField.post(new Runnable() {
+                    @Override
+                    public void run() {
+                    //Dessa bör köras i post pga de påverkar gui.
+                    popList.setAdapter(myAdapter);
+                    myAdapter.notifyDataSetChanged();
+                    popList.show();
+                    lastShownId = id;
+                    }
+                });
+            }
             }
         });
         t.start();
@@ -101,6 +105,7 @@ public class InteractiveSearcher extends LinearLayout {
 
     private List<String> doNWCall(String name, int id){
         Log.e("InteractiveSearcher", "doNetworkCall");
+        List<String> nameL = new ArrayList<String>();
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpGet httpget = new HttpGet("http://flask-afteach.rhcloud.com/getnames/"+id+"/"+name);
@@ -128,7 +133,6 @@ public class InteractiveSearcher extends LinearLayout {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
             return nameL;
         } catch (IOException e) {
             e.printStackTrace();

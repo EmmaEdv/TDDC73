@@ -20,7 +20,6 @@ public class ResultItem extends View {
 
     @Override
     protected void onDraw(Canvas canvas){
-        Log.e("ResultItem","onDraw");
         Paint text = new Paint();
         text.setColor(Color.BLACK);
         text.setTextSize(50);
@@ -35,8 +34,6 @@ public class ResultItem extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-        Log.e("ResultItem", "onMeasure");
-
         int desiredWidth = 100;
         int desiredHeight = 100;
 
@@ -49,30 +46,29 @@ public class ResultItem extends View {
         int height;
 
         //Measure Width
+        //Must be this size
         if (widthMode == MeasureSpec.EXACTLY) {
-            //Must be this size
             width = widthSize;
-        } else if (widthMode == MeasureSpec.AT_MOST) {
-            //Can't be bigger than...
+        } //Can't be bigger than...
+        else if (widthMode == MeasureSpec.AT_MOST) {
             width = Math.min(desiredWidth, widthSize);
-        } else {
-            //Be whatever you want
+        } //Be whatever you want
+        else {
             width = desiredWidth;
         }
 
         //Measure Height
+        //Must be this size
         if (heightMode == MeasureSpec.EXACTLY) {
-            //Must be this size
             height = heightSize;
-        } else if (heightMode == MeasureSpec.AT_MOST) {
-            //Can't be bigger than...
+
+        } //Can't be bigger than...
+        else if (heightMode == MeasureSpec.AT_MOST) {
             height = Math.min(desiredHeight, heightSize);
         } else {
-            //Be whatever you want
             height = desiredHeight;
         }
 
-        //MUST CALL THIS
         setMeasuredDimension(width, height);
     }
 }

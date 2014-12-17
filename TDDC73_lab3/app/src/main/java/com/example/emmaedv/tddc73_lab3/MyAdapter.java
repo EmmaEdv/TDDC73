@@ -13,11 +13,9 @@ import java.util.List;
  */
 public class MyAdapter extends BaseAdapter {
     Context myContext;
-    //String[] names;
     List<String> nm;
 
     public MyAdapter(Context context, List<String> stringArray){
-        Log.e("MyAdapter", "MyAdapter");
         myContext = context;
         nm = stringArray;
     }
@@ -29,8 +27,6 @@ public class MyAdapter extends BaseAdapter {
     //Hämta namn från resultatet i sökningen
     @Override
     public Object getItem(int i) {
-        Log.e("MyAdapter","getItem");
-        //return names[i];
         return nm.get(i);
     }
 
@@ -42,8 +38,6 @@ public class MyAdapter extends BaseAdapter {
     //Denna skapar varje nytt namn som finns i resultatet för sökningen
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Log.e("MyAdapter","getView");
-        //ResultItem resItem = new ResultItem(myContext, names[i]);
         ResultItem resItem = new ResultItem(myContext, nm.get(i));
 
         return resItem;

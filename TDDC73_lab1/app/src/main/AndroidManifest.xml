@@ -28,22 +28,24 @@
         <activity
             android:name=".Lab1_java1"
             android:label="@string/gui1">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <!-- Gui 2 java -->
         <activity
             android:name=".Lab1_java2"
             android:label="@string/gui2">
+
         </activity>
 
         <!-- Gui 3 java -->
         <activity
             android:name=".Lab1_java3"
             android:label="@string/gui3">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
