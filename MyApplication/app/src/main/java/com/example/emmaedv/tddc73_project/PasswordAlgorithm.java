@@ -8,8 +8,10 @@ import java.util.List;
 
 /**
  * Created by emmaedv on 17/12/14.
+ * PasswordAlgorithm sets the algorithm which measures the strength of a password.
+ * @author
  */
-public class PasswordAlgorithm {
+public class PasswordAlgorithm implements PasswordAlgorithmInterface {
     static int maxStrength = 100;
     int minLength;
     int pwStrength;
@@ -28,6 +30,14 @@ public class PasswordAlgorithm {
         pwFeedback = feedback;
     }
 
+    /**
+     * checkStrength contains the conditions and the rating of the password
+     *
+     * @param password                      the password
+     * @return Pair of Integer & String     The pair contains the strength in percent of the password
+     *                                      and the word the strength represents
+     */
+    @Override
     public Pair<Integer, String> checkStrength(String password){
         boolean hasUpperCase = !password.equals(password.toLowerCase());
         boolean hasLowerCase = !password.equals(password.toUpperCase());
@@ -51,7 +61,7 @@ public class PasswordAlgorithm {
             numbers = (hasNumbers) ? maxStrength/nrOfConditions : 0;
             length = (password.length()>=minLength) ? (password.length()>minLength ? 2*maxStrength/nrOfConditions : maxStrength/nrOfConditions) : 0;
         }
-        Log.e("Total: " + pwStrength + ", Uppercase: " + upperC + " Lowercase: " + lowerC + ", Symbols: " + symbols, "numbers " + numbers + " length: " + length);
+        Log.i("Total: " + pwStrength + ", Uppercase: " + upperC + " Lowercase: " + lowerC + ", Symbols: " + symbols, "numbers " + numbers + " length: " + length);
         pwStrength = length+upperC+lowerC+symbols+numbers;
 
         int wordPos = (int) Math.round((strengthLevels-1)*(pwStrength*0.01));

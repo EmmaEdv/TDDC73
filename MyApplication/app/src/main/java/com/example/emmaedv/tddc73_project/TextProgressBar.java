@@ -22,14 +22,6 @@ public class TextProgressBar extends ProgressBar {
     private int textColor = Color.BLACK;
     private float textSize = 30;
 
-    public TextProgressBar(Context context) {
-        super(context);
-    }
-
-    public TextProgressBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
     public TextProgressBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -53,10 +45,6 @@ public class TextProgressBar extends ProgressBar {
         canvas.drawText(text, x, y, textPaint);
     }
 
-    public String getText() {
-        return text;
-    }
-
     public synchronized void setText(String text) {
         if (text != null) {
             this.text = text;
@@ -66,26 +54,8 @@ public class TextProgressBar extends ProgressBar {
         postInvalidate();
     }
 
-    public int getTextColor() {
-        return textColor;
-    }
-
-    public synchronized void setTextColor(int textColor) {
-        this.textColor = textColor;
-        postInvalidate();
-    }
-
-    public float getTextSize() {
-        return textSize;
-    }
-
-    public synchronized void setTextSize(float textSize) {
-        this.textSize = textSize;
-        postInvalidate();
-    }
-
     public void visualizeStrength(Pair<Integer, String> strengthPair){
-        Log.e("Visualize Strength: ", "styrka: " + strengthPair.first);
+        Log.i("Visualize Strength: ", "styrka: " + strengthPair.first);
         getProgressDrawable().setColorFilter(setStrengthColor(strengthPair.first), PorterDuff.Mode.SRC_IN);
         setProgress(strengthPair.first);
         setText(strengthPair.second);
@@ -98,7 +68,7 @@ public class TextProgressBar extends ProgressBar {
         hsv[0] = (float) (strength*1.2);
         hsv[1] = 100;
         hsv[2] = 100;
-        Log.e("Color: ", ""+hsv[0]);
+        Log.i("Color: ", "" + hsv[0]);
         return Color.HSVToColor(hsv);
     }
 }

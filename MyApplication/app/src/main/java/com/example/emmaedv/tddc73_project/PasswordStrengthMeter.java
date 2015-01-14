@@ -14,9 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by emmaedv on 15/12/14.
+ * PasswordStrengthMeter
+ * @author
+ * @author
  */
-public class PasswordStrengthMeter extends LinearLayout{
+public class PasswordStrengthMeter extends LinearLayout {
 
     Context context;
     EditText userName;
@@ -24,9 +26,10 @@ public class PasswordStrengthMeter extends LinearLayout{
     Button login;
     TextProgressBar textProgressBar;
     Pair<Integer, String> pwStrength;
+    PasswordAlgorithmInterface pwAlgorithm;
+
     int pwLength = 12;
     int pwLevels = 7;
-    PasswordAlgorithm pwAlgorithm;
     List<String> levelFeedback = Arrays.asList("Too short", "Weak", "Mjeh", "Okay", "Good", "Strong", "Perfect");
 
     public PasswordStrengthMeter(Context theContext){
@@ -60,7 +63,7 @@ public class PasswordStrengthMeter extends LinearLayout{
         addView(login);
     }
 
-    public void setPasswordAlgorithm(PasswordAlgorithm pwAlgo){
+    public void setPasswordAlgorithm(PasswordAlgorithmInterface pwAlgo){
         pwAlgorithm = pwAlgo;
     }
 
@@ -72,7 +75,7 @@ public class PasswordStrengthMeter extends LinearLayout{
 
         @Override
         public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-            Log.e("onTextChanged", "");
+            Log.i("onTextChanged", "");
             String password = charSequence.toString();
             pwStrength = pwAlgorithm.checkStrength(password);
             textProgressBar.visualizeStrength(pwStrength);
