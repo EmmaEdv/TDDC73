@@ -16,7 +16,7 @@ import android.util.Pair;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-public class TextProgressBar extends ProgressBar {
+public class TextProgressBar extends ProgressBar implements TextProgressBarInterface {
 
     private String text;
     private int textColor = Color.BLACK;
@@ -45,6 +45,7 @@ public class TextProgressBar extends ProgressBar {
         canvas.drawText(text, x, y, textPaint);
     }
 
+    @Override
     public synchronized void setText(String text) {
         if (text != null) {
             this.text = text;
@@ -54,6 +55,7 @@ public class TextProgressBar extends ProgressBar {
         postInvalidate();
     }
 
+    @Override
     public void visualizeStrength(Pair<Integer, String> strengthPair){
         Log.i("Visualize Strength: ", "styrka: " + strengthPair.first);
         getProgressDrawable().setColorFilter(setStrengthColor(strengthPair.first), PorterDuff.Mode.SRC_IN);
@@ -61,6 +63,7 @@ public class TextProgressBar extends ProgressBar {
         setText(strengthPair.second);
     }
 
+    @Override
     public int setStrengthColor(int strength){
         //Strength: 0-100%
         //Red: 0, yellow: 60, green: 120 -> 0-1.2*strength = 0-120
