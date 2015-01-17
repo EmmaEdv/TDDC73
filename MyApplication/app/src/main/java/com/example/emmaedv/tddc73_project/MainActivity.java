@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //Byt bakgrund och eventuellt text på steps left-objekten
-                stepsLeft.doStuff();
+                stepsLeft.decreaseStep();
             }
         });
 
@@ -53,7 +53,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //Byt bakgrund och eventuellt text på steps left-objekten
-                stepsLeft.doStuff();
+                stepsLeft.increaseStep();
             }
         });
 

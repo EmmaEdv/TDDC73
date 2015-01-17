@@ -3,6 +3,7 @@ package com.example.emmaedv.tddc73_project;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,8 +21,9 @@ public class StepsLeft extends LinearLayout{
     TextView centerStep;
     TextView rightStep;
 
+    int shownTv = 3;
     int totalSteps = 5;
-    int currentStep;
+    int currentStep = 1;
 
     public StepsLeft(Context theContext) {
         super(theContext);
@@ -36,24 +38,24 @@ public class StepsLeft extends LinearLayout{
         gd.setStroke(1,0xFF000000);*/
 
         leftStep = new TextView(context);
-        rightStep.setId(1);
+        leftStep.setId(0);
         leftStep.setLayoutParams(layoutParams);
-        leftStep.setBackgroundColor(Color.WHITE);
+        leftStep.setBackgroundColor(Color.CYAN);
         //leftStep.setBackgroundResource(gd);
         //leftStep.setBackgroundResource(R.drawable.border_style);
         leftStep.setText("1/"+totalSteps);
 
         centerStep = new TextView(context);
-        rightStep.setId(2);
+        centerStep.setId(1);
         centerStep.setLayoutParams(layoutParams);
-        centerStep.setBackgroundColor(Color.CYAN);
+        centerStep.setBackgroundColor(Color.WHITE);
         //centerStep.setBackgroundResource(R.drawable.border_style);
         centerStep.setText("2/"+totalSteps);
 
         rightStep = new TextView(context);
-        rightStep.setId(3);
+        rightStep.setId(2);
         rightStep.setLayoutParams(layoutParams);
-        rightStep.setBackgroundColor(Color.CYAN);
+        rightStep.setBackgroundColor(Color.WHITE);
         //rightStep.setBackgroundResource(R.drawable.border_style);
         rightStep.setText("3/"+totalSteps);
 
@@ -63,19 +65,79 @@ public class StepsLeft extends LinearLayout{
     }
 
     //Funktion som håller koll på vilket steg vi är på och vilka som ska ändra färg & text
-    void doStuff(){
-        setBgColor();
-        setStepText();
+    void increaseStep(){
+        currentStep = ((currentStep == totalSteps) ? totalSteps : (currentStep + 1));
+        updateTextView(currentStep);
+    }
+
+
+    //Funktion som håller koll på vilket steg vi är på och vilka som ska ändra färg & text
+    void decreaseStep(){
+        currentStep = ((currentStep == 1) ? 1 : (currentStep - 1));
+        updateTextView(currentStep);
     }
 
     //Funktion för att byta bakgrundsfärg
-    void setBgColor(int tvId){
+    void updateTextView(int cS){
+        int tvId;
+        TextView tv;
         //Komma åt den textvy som har id:t som skickas in, och ändra bakgrund på den textvyn...
-        tv.setBackgroundColor(Color.RED);
-    }
+        //OBS!! Om shown steps är annat än 3 så måste vi snygga till denna hallå! Hehe!
+        //Om lägsta steget: aktivt steg är första
+        if(cS == 1)
+            tvId = 0;
+        //Om varken lägsta eller högsta steget: aktivt steg är mittersta
+        else if(cS>1 && cS<totalSteps)
+            tvId = 1;
+        //Om högsta steget: aktivt steg är sista
+        else
+            tvId = 2;
 
-    //En funktion för att byta text
-    void setStepText(int tvId, int step){
-        tv.setText(step+"/"+totalSteps);
+        switch (tvId) {
+            case 0:
+                tv = (TextView) findViewById(0);
+                tv.setBackgroundColor(Color.CYAN);
+                tv.setText(cS+"/"+totalSteps);
+
+                tv = (TextView) findViewById(1);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setText((cS+1)+"/"+totalSteps);
+
+                tv = (TextView) findViewById(2);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setText((cS+2)+"/"+totalSteps);
+
+                break;
+
+            case 1:
+                tv = (TextView) findViewById(0);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setText((cS-1)+"/"+totalSteps);
+
+                tv = (TextView) findViewById(1);
+                tv.setBackgroundColor(Color.CYAN);
+                tv.setText(cS+"/"+totalSteps);
+
+                tv = (TextView) findViewById(2);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setText((cS+1)+"/"+totalSteps);
+
+                break;
+
+            case 2:
+                tv = (TextView) findViewById(0);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setText((cS-2)+"/"+totalSteps);
+
+                tv = (TextView) findViewById(1);
+                tv.setBackgroundColor(Color.WHITE);
+                tv.setText((cS-2)+"/"+totalSteps);
+
+                tv = (TextView) findViewById(2);
+                tv.setBackgroundColor(Color.CYAN);
+                tv.setText(cS+"/"+totalSteps);
+
+                break;
+        }
     }
 }
