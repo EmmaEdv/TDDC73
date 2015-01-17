@@ -21,7 +21,6 @@ import java.util.List;
 public class PasswordStrengthMeter extends LinearLayout {
 
     Context context;
-    EditText userName;
     EditText passwordField;
     Button login;
     TextProgressBar textProgressBar;
@@ -42,10 +41,6 @@ public class PasswordStrengthMeter extends LinearLayout {
 
         LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
-        userName = new EditText(context);
-        userName.setLayoutParams(layoutParams);
-        userName.setText(R.string.userName);
-
         passwordField = new EditText(context);
         passwordField.addTextChangedListener(watcher);
         passwordField.setLayoutParams(layoutParams);
@@ -57,7 +52,6 @@ public class PasswordStrengthMeter extends LinearLayout {
         textProgressBar = new TextProgressBar(context, null, android.R.attr.progressBarStyleHorizontal);
         textProgressBar.setText(getResources().getString(R.string.tooShort));
 
-        addView(userName);
         addView(passwordField);
         addView(textProgressBar);
         addView(login);
