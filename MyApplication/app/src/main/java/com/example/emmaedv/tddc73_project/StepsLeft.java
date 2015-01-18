@@ -27,8 +27,9 @@ public class StepsLeft extends LinearLayout{
     static int centerSlot = shownTv/2;
 
     int currentStep = 1;
-    int counter = 0;
+    int counter = 1;
     int activeSlot = 0;
+    int prevSlot = 0;
     List<String> headers = Arrays.asList("Första", "Andra", "Tredje", "Fjärde", "Femte", "Sjätte", "Sjunde", "Åttånde", "Nionde");
 
     public StepsLeft(Context theContext) {
@@ -172,23 +173,49 @@ public class StepsLeft extends LinearLayout{
             case 1:
                 //SET ACTIVE SLOT:
                 //Någon av de första är aktiva
+                prevSlot = activeSlot;
                 if(counter < centerSlot){
-                    counter++;
-                    activeSlot++;
-                }
-                //Den mellersta är aktiv
-                else if(counter >= centerSlot && counter < (totalSteps-shownTv+centerSlot)){
-                    activeSlot = centerSlot;
-                    counter++;
-                }
-                //Någon av de sista är aktiva
-                else{
-                    counter++;
-                    activeSlot = ((counter == totalSteps-shownTv+centerSlot) ? shownTv-1 : activeSlot+1);
-                    if (activeSlot > shownTv-1) activeSlot = shownTv-1;
+                    if(increase){
+                        counter++;
+                        activeSlot++;
+                    }
+                    else{
+                        counter--;
+                        activeSlot--;
+                    }
+
+                    if(counter<1) counter=1;
+                    if(activeSlot<0) activeSlot=0;
+                    Log.i("Första", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
-                Log.i("Udda","Active slot: " + activeSlot);
+                //Någon av de sista är aktiva
+                else if(counter >= (totalSteps-centerSlot)){
+                    if(increase){
+                        counter++;
+                        activeSlot = ((counter == totalSteps-shownTv+centerSlot) ? shownTv-1 : activeSlot+1);
+                    }
+                    else{
+                        counter--;
+                        activeSlot = (counter <= totalSteps-centerSlot ? centerSlot : activeSlot-1);
+                    }
+                    //Så att den stannar på högsta steget och inte går vidare
+                    if (activeSlot > shownTv-1) activeSlot = shownTv-1;
+                    if (counter > totalSteps) counter = totalSteps;
+                    Log.i("Sista", "Counter: " + counter + " activeSlot: " + activeSlot);
+                }
+
+                //Den mellersta är aktiv
+                else{// if(counter >= (centerSlot) && counter <= (totalSteps-shownTv+centerSlot)){
+                    counter = (increase ? counter+1 : counter-1);
+                    activeSlot = (counter > centerSlot ? centerSlot : activeSlot-1);
+                    activeSlot = (counter > centerSlot ? centerSlot : activeSlot-1);
+                    Log.i("mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
+                }
+
+
+
+                //Log.i("Udda","Active slot: " + activeSlot + " counter: " + counter);
                 for(int i = 0; i<shownTv; i++){
                     tv = (TextView) findViewById(i);
                     tv.setBackgroundColor(((i==activeSlot)?Color.GREEN:Color.WHITE));
