@@ -2,8 +2,11 @@ package com.example.emmaedv.tddc73_project;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,10 +21,15 @@ public class StepsLeft extends LinearLayout{
     TextView header;
     TextView step;
 
-    List<String> headers = Arrays.asList("Första", "Andra", "Tredje", "Fjärde", "Femte");
-    int shownTv = 5;
-    int totalSteps = 5;
+    static int shownTv = 5;
+    static int even = shownTv%2;
+    static int totalSteps = 9;
+    static int centerSlot = shownTv/2;
+
     int currentStep = 1;
+    int counter = 0;
+    int activeSlot = 0;
+    List<String> headers = Arrays.asList("Första", "Andra", "Tredje", "Fjärde", "Femte", "Sjätte", "Sjunde", "Åttånde", "Nionde");
 
     public StepsLeft(Context theContext) {
         super(theContext);
@@ -59,7 +67,7 @@ public class StepsLeft extends LinearLayout{
     //Funktion som håller koll på vilket steg vi är på och vilka som ska ändra färg & text
     void increaseStep(){
         currentStep = ((currentStep == totalSteps) ? totalSteps : (currentStep + 1));
-        updateTextView(currentStep);
+        updateTextView(currentStep, true);
         header.setText(headers.get(currentStep-1));
     }
 
@@ -67,18 +75,17 @@ public class StepsLeft extends LinearLayout{
     //Funktion som håller koll på vilket steg vi är på och vilka som ska ändra färg & text
     void decreaseStep(){
         currentStep = ((currentStep == 1) ? 1 : (currentStep - 1));
-        updateTextView(currentStep);
+        updateTextView(currentStep, false);
         header.setText(headers.get(currentStep-1));
     }
 
     //Funktion för att byta bakgrundsfärg
-    void updateTextView(int cS){
-        int tvId;
+    void updateTextView(int cS, Boolean increase){
         TextView tv;
+/*
+        int tvId;
         //OBS!! Om shown steps är annat än 3 så måste vi snygga till denna hallå! Hehe!
         //Om lägsta steget: aktivt steg är första
-        //tvId = ((cS==1) ? 1 : ((cS == totalSteps) ? shownTv : ));
-
         if(cS == 1)
             tvId = 0;
         //Om varken lägsta eller högsta steget: aktivt steg är mittersta
@@ -132,6 +139,61 @@ public class StepsLeft extends LinearLayout{
                 tv.setBackgroundColor(Color.CYAN);
                 tv.setText(cS+"/"+totalSteps);
 
+                break;
+        }*/
+
+        switch (even){
+            case 0:
+                //SET ACTIVE SLOT:
+                //Första slotten är aktiv
+                if(counter < (totalSteps-shownTv)){
+                    counter++;
+                    activeSlot = 0;
+                }
+                //Någon av de mellersta är aktiva
+                else if(counter >= (totalSteps-shownTv) && counter < totalSteps){
+                    activeSlot++;
+                    counter++;
+                }
+                //Sista slotten är aktiv
+                else{// if(counter >= totalSteps){
+                    counter=totalSteps;
+                    activeSlot = shownTv-1;
+                }
+                Log.i("Jämn","Active slot: " + activeSlot);
+                for(int i = 0; i<shownTv; i++){
+                    tv = (TextView) findViewById(i);
+                    tv.setBackgroundColor(((i==activeSlot)?Color.GREEN:Color.WHITE));
+                    tv.setText(cS+"/"+totalSteps);
+                }
+
+                break;
+
+            case 1:
+                //SET ACTIVE SLOT:
+                //Någon av de första är aktiva
+                if(counter < centerSlot){
+                    counter++;
+                    activeSlot++;
+                }
+                //Den mellersta är aktiv
+                else if(counter >= centerSlot && counter < (totalSteps-shownTv+centerSlot)){
+                    activeSlot = centerSlot;
+                    counter++;
+                }
+                //Någon av de sista är aktiva
+                else{
+                    counter++;
+                    activeSlot = ((counter == totalSteps-shownTv+centerSlot) ? shownTv-1 : activeSlot+1);
+                    if (activeSlot > shownTv-1) activeSlot = shownTv-1;
+                }
+
+                Log.i("Udda","Active slot: " + activeSlot);
+                for(int i = 0; i<shownTv; i++){
+                    tv = (TextView) findViewById(i);
+                    tv.setBackgroundColor(((i==activeSlot)?Color.GREEN:Color.WHITE));
+                    tv.setText(cS+"/"+totalSteps);
+                }
                 break;
         }
     }
