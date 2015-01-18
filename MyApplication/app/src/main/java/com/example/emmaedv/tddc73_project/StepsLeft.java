@@ -209,17 +209,13 @@ public class StepsLeft extends LinearLayout{
                 else{// if(counter >= (centerSlot) && counter <= (totalSteps-shownTv+centerSlot)){
                     counter = (increase ? counter+1 : counter-1);
                     activeSlot = (counter > centerSlot ? centerSlot : activeSlot-1);
-                    activeSlot = (counter > centerSlot ? centerSlot : activeSlot-1);
                     Log.i("mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
-
-
-                //Log.i("Udda","Active slot: " + activeSlot + " counter: " + counter);
                 for(int i = 0; i<shownTv; i++){
                     tv = (TextView) findViewById(i);
-                    tv.setBackgroundColor(((i==activeSlot)?Color.GREEN:Color.WHITE));
-                    tv.setText(cS+"/"+totalSteps);
+                    tv.setBackgroundColor(((i==activeSlot) ? Color.CYAN : Color.WHITE));
+                    tv.setText( (i == activeSlot ? cS : (cS-activeSlot+i)) +"/"+totalSteps);
                 }
                 break;
         }
