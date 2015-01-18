@@ -18,34 +18,31 @@ public class StepsLeft extends LinearLayout{
     Context context;
 
     LinearLayout stepLayout;
-    TextView header;
-    TextView step;
+    TextView header, step;
+    List<String> headers;
 
-    static int shownSteps = 8;
-    static int even = shownSteps%2;
-    static int totalSteps = 9;
-    static int centerSlot = shownSteps/2;
+    int shownSteps, even, totalSteps, centerSlot;
 
     int currentStep = 1;
     int counter = 1;
     int activeSlot = 0;
-    int prevSlot = 0;
-    List<String> headers = Arrays.asList("Första", "Andra", "Tredje", "Fjärde", "Femte", "Sjätte", "Sjunde", "Åttånde", "Nionde");
 
     public StepsLeft(Context theContext) {
         super(theContext);
         context = theContext;
         this.setOrientation(VERTICAL);
 
+        headers = Arrays.asList("Första", "Andra", "Tredje", "Fjärde", "Femte", "Sjätte", "Sjunde", "Åttånde", "Nionde");
+        shownSteps = 8;
+        totalSteps = 9;
+
+        even = shownSteps%2;
+        centerSlot = shownSteps/2;
+
         stepLayout = new LinearLayout(context);
         stepLayout.setOrientation(HORIZONTAL);
 
         LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1));
-
-        /*GradientDrawable gd = new GradientDrawable();
-        gd.setColor(0xFF00FF00);
-        gd.setCornerRadius(0);
-        gd.setStroke(1,0xFF000000);*/
 
         for(int i = 0; i<shownSteps; i++) {
             step = new TextView(context);
@@ -65,33 +62,68 @@ public class StepsLeft extends LinearLayout{
         addView(header);
     }
 
-    //Funktion som håller koll på vilket steg vi är på och vilka som ska ändra färg & text
-    void increaseStep(){
+    public StepsLeft(Context theContext, int vS, int tS, List<String> headerList) {
+        super(theContext);
+        context = theContext;
+        this.setOrientation(VERTICAL);
+
+        headers = headerList;
+        shownSteps = vS;
+        totalSteps = tS;
+
+        even = shownSteps%2;
+        centerSlot = shownSteps/2;
+
+        stepLayout = new LinearLayout(context);
+        stepLayout.setOrientation(HORIZONTAL);
+
+        LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1));
+
+        for(int i = 0; i<shownSteps; i++) {
+            step = new TextView(context);
+            step.setId(i);
+            step.setLayoutParams(layoutParams);
+            step.setBackgroundColor(i == 0 ? Color.CYAN : Color.WHITE);
+            step.setText((i+1)+"/" + totalSteps);
+            stepLayout.addView(step);
+        }
+        addView(stepLayout);
+
+        //Rubrik för stegen
+        header = new TextView(context);
+        header.setText(headers.get(0));
+        header.setTextSize(20);
+        header.setGravity(1);
+        addView(header);
+    }
+
+    //Funktion som ökar steg
+    protected void increaseStep(){
         currentStep = ((currentStep == totalSteps) ? totalSteps : (currentStep + 1));
         updateTextView(currentStep, true);
         header.setText(headers.get(currentStep-1));
     }
 
-
-    //Funktion som håller koll på vilket steg vi är på och vilka som ska ändra färg & text
-    void decreaseStep(){
+    //Funktion som minskar steg
+    protected void decreaseStep(){
         currentStep = ((currentStep == 1) ? 1 : (currentStep - 1));
         updateTextView(currentStep, false);
         header.setText(headers.get(currentStep-1));
     }
 
-    //Funktion för att byta bakgrundsfärg
-    void updateTextView(int cS, Boolean increase){
+    //Funktion för att uppdatera färg och text på steg
+    private void updateTextView(int cS, Boolean increase){
         TextView tv;
 
         switch (even){
+            //Om jämnt antal steg
             case 0:
                 //SET ACTIVE SLOT:
                 //Första är aktiv
                 if(counter <= (totalSteps-shownSteps)){
                     counter = (increase ? counter+1 : counter-1);
                     activeSlot = 0;
-                    Log.i("Första", "Counter: " + counter + " activeSlot: " + activeSlot);
+                    //Log.i("Första", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
                 //Någon av de mellersta är aktiva
                 else if(counter > (totalSteps-shownSteps) && counter < totalSteps){
@@ -104,7 +136,7 @@ public class StepsLeft extends LinearLayout{
                         counter--;
                         if(activeSlot<0) activeSlot = 0;
                     }
-                    Log.i("Mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
+                    //Log.i("Mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
                 //Sista slotten är aktiv
                 else{// if(counter >= totalSteps){
@@ -116,7 +148,7 @@ public class StepsLeft extends LinearLayout{
                         counter--;
                         activeSlot--;
                     }
-                    Log.i("Sista", "Counter: " + counter + " activeSlot: " + activeSlot);
+                    //Log.i("Sista", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
                 for(int i = 0; i<shownSteps; i++){
@@ -127,10 +159,10 @@ public class StepsLeft extends LinearLayout{
 
                 break;
 
+            //Om udda antal steg
             case 1:
                 //SET ACTIVE SLOT:
                 //Någon av de första är aktiva
-                prevSlot = activeSlot;
                 if(counter < centerSlot){
                     if(increase){
                         counter++;
@@ -143,7 +175,7 @@ public class StepsLeft extends LinearLayout{
 
                     if(counter<1) counter=1;
                     if(activeSlot<0) activeSlot=0;
-                    Log.i("Första", "Counter: " + counter + " activeSlot: " + activeSlot);
+                    //Log.i("Första", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
                 //Någon av de sista är aktiva
@@ -159,14 +191,14 @@ public class StepsLeft extends LinearLayout{
                     //Så att den stannar på högsta steget och inte går vidare
                     if (activeSlot > shownSteps-1) activeSlot = shownSteps-1;
                     if (counter > totalSteps) counter = totalSteps;
-                    Log.i("Sista", "Counter: " + counter + " activeSlot: " + activeSlot);
+                    //Log.i("Sista", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
                 //Den mellersta är aktiv
                 else{// if(counter >= (centerSlot) && counter <= (totalSteps-shownSteps+centerSlot)){
                     counter = (increase ? counter+1 : counter-1);
                     activeSlot = (counter > centerSlot ? centerSlot : activeSlot-1);
-                    Log.i("mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
+                    //Log.i("mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
                 for(int i = 0; i<shownSteps; i++){

@@ -15,47 +15,47 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 public class MainActivity extends Activity {
     LinearLayout linearLayout;
     LinearLayout contentLayout;
     LinearLayout buttonLayout;
-    PasswordStrengthMeter passwordStrengthMeter;
+    //    PasswordStrengthMeter passwordStrengthMeter;
+    FirstView firstView;
     SecondView secondView;
     ThirdView thirdView;
     StepsLeft stepsLeft;
     Button next;
     Button prev;
-    EditText userName;
+    List<String> list = Arrays.asList("first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight", "ninth");
+    //    EditText userName;
     int currentStep = 1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         linearLayout = new LinearLayout(this);
         contentLayout = new LinearLayout(this);
+
         LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         contentLayout.setLayoutParams(layoutParams);
+
         contentLayout.setOrientation(LinearLayout.VERTICAL);
 
         setContentView(linearLayout);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        userName = new EditText(MainActivity.this);
-        userName.setLayoutParams(layoutParams);
-        userName.setText(R.string.userName);
-
         buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-
-        stepsLeft = new StepsLeft(this);
-
-        passwordStrengthMeter = new PasswordStrengthMeter(this);
+        //stepsLeft = new StepsLeft(this);
+        stepsLeft = new StepsLeft(this, 6, 9, list);
+        firstView = new FirstView(this);
         secondView = new SecondView(this);
         thirdView = new ThirdView(this);
-
         prev = new Button(this);
-        prev.setText("Föregående");
+        prev.setText("Previous");
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,9 +67,8 @@ public class MainActivity extends Activity {
                 checkCurrent(currentStep);
             }
         });
-
         next = new Button(this);
-        next.setText("Nästa");
+        next.setText("Next");
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,21 +81,20 @@ public class MainActivity extends Activity {
         });
 
         LinearLayout.LayoutParams buttonParams = (new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT, 1));
-        contentLayout.addView(userName);
-        contentLayout.addView(passwordStrengthMeter);
 
+        contentLayout.addView(firstView);
         linearLayout.addView(stepsLeft);
         linearLayout.addView(contentLayout);
         buttonLayout.addView(prev, buttonParams);
         buttonLayout.addView(next, buttonParams);
         linearLayout.addView(buttonLayout);
-    }
 
+
+    }
     void checkCurrent (int step){
         switch(step){
             case 1:
-                contentLayout.addView(userName);
-                contentLayout.addView(passwordStrengthMeter);
+                contentLayout.addView(firstView);
                 break;
             case 2:
                 contentLayout.addView(secondView);
