@@ -14,9 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SecondView extends LinearLayout {
-
     Context context;
-
     EditText testText;
 
     public SecondView(Context theContext){
@@ -27,9 +25,8 @@ public class SecondView extends LinearLayout {
         LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         testText = new EditText(context);
-//        testText.addTextChangedListener(watcher);
         testText.setLayoutParams(layoutParams);
-        testText.setText("andra");
+        testText.setText("Andra");
         addView(testText);
     }
 

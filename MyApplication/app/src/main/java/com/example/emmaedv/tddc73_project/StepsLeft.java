@@ -12,7 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Created by emmaedv on 20/12/14.
+ * StepsLeft: Shows how far a user has come when filling in data over multiple steps
+ * @author Johan Dagvall & Emma Edvardsson
  */
 public class StepsLeft extends LinearLayout{
     Context context;
@@ -27,14 +28,18 @@ public class StepsLeft extends LinearLayout{
     int counter = 1;
     int activeSlot = 0;
 
+    /**
+     * Default constructor
+     * Shows 5 steps out of 9
+     **/
     public StepsLeft(Context theContext) {
         super(theContext);
         context = theContext;
         this.setOrientation(VERTICAL);
 
-        headers = Arrays.asList("Första", "Andra", "Tredje", "Fjärde", "Femte", "Sjätte", "Sjunde", "Åttånde", "Nionde");
-        shownSteps = 8;
-        totalSteps = 9;
+        headers = Arrays.asList("First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eight", "Ninth");
+        shownSteps = 5;
+        totalSteps = headers.size();
 
         even = shownSteps%2;
         centerSlot = shownSteps/2;
@@ -44,6 +49,7 @@ public class StepsLeft extends LinearLayout{
 
         LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1));
 
+        //Dynamically create and add the correct number of steps.
         for(int i = 0; i<shownSteps; i++) {
             step = new TextView(context);
             step.setId(i);
@@ -54,7 +60,7 @@ public class StepsLeft extends LinearLayout{
         }
         addView(stepLayout);
 
-        //Rubrik för stegen
+        //Set and add the header text
         header = new TextView(context);
         header.setText(headers.get(0));
         header.setTextSize(20);
@@ -62,14 +68,21 @@ public class StepsLeft extends LinearLayout{
         addView(header);
     }
 
-    public StepsLeft(Context theContext, int vS, int tS, List<String> headerList) {
+    /**
+     * Constructor where user can set number of visual steps and headers
+     *
+     * @param theContext
+     * @param visualSteps - number of shown steps
+     * @param headerList - list of headers. Number of total steps is extracted from size of list
+     */
+    public StepsLeft(Context theContext, int visualSteps, List<String> headerList) {
         super(theContext);
         context = theContext;
         this.setOrientation(VERTICAL);
 
         headers = headerList;
-        shownSteps = vS;
-        totalSteps = tS;
+        shownSteps = visualSteps;
+        totalSteps = headers.size();
 
         even = shownSteps%2;
         centerSlot = shownSteps/2;
@@ -79,6 +92,7 @@ public class StepsLeft extends LinearLayout{
 
         LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT, 1));
 
+        //Dynamically create and add the correct number of steps.
         for(int i = 0; i<shownSteps; i++) {
             step = new TextView(context);
             step.setId(i);
@@ -89,7 +103,7 @@ public class StepsLeft extends LinearLayout{
         }
         addView(stepLayout);
 
-        //Rubrik för stegen
+        //Set and add the header text
         header = new TextView(context);
         header.setText(headers.get(0));
         header.setTextSize(20);
@@ -97,35 +111,49 @@ public class StepsLeft extends LinearLayout{
         addView(header);
     }
 
-    //Funktion som ökar steg
+    /**
+     * Method called when user wants to increase the step
+     */
     protected void increaseStep(){
+        //If at the last step, stay at last step otherwise increase
         currentStep = ((currentStep == totalSteps) ? totalSteps : (currentStep + 1));
+        //Call updateTextView function
         updateTextView(currentStep, true);
+        //Set the header
         header.setText(headers.get(currentStep-1));
     }
 
-    //Funktion som minskar steg
+    /**
+     * Method called when user wants to decrease the step
+     */
     protected void decreaseStep(){
+        //If at the first step, stay at first step otherwise decrease
         currentStep = ((currentStep == 1) ? 1 : (currentStep - 1));
+        //Call updateTextView function
         updateTextView(currentStep, false);
+        //Set the header
         header.setText(headers.get(currentStep-1));
     }
 
-    //Funktion för att uppdatera färg och text på steg
+    /**
+     * Updates the text views with correct background color and text
+     * @param cS - current step
+     * @param increase - true if increase, false if decrease
+     */
     private void updateTextView(int cS, Boolean increase){
         TextView tv;
 
         switch (even){
-            //Om jämnt antal steg
+            //Case 0: Even number of shown steps
             case 0:
-                //SET ACTIVE SLOT:
-                //Första är aktiv
+                //Set the active step
+
+                //First step is active
                 if(counter <= (totalSteps-shownSteps)){
                     counter = (increase ? counter+1 : counter-1);
                     activeSlot = 0;
-                    //Log.i("Första", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
-                //Någon av de mellersta är aktiva
+                //Step between first and last is active
                 else if(counter > (totalSteps-shownSteps) && counter < totalSteps){
                     if(increase){
                         activeSlot++;
@@ -134,11 +162,11 @@ public class StepsLeft extends LinearLayout{
                     else {
                         activeSlot = (counter <= totalSteps-shownSteps ? 0 : activeSlot-1);
                         counter--;
+                        //Just to make sure we're not making activeSlot negative
                         if(activeSlot<0) activeSlot = 0;
                     }
-                    //Log.i("Mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
-                //Sista slotten är aktiv
+                //Last step is active
                 else{// if(counter >= totalSteps){
                     if(increase){
                         counter = totalSteps;
@@ -148,9 +176,9 @@ public class StepsLeft extends LinearLayout{
                         counter--;
                         activeSlot--;
                     }
-                    //Log.i("Sista", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
+                //Set the correct background color and text to each text view
                 for(int i = 0; i<shownSteps; i++){
                     tv = (TextView) findViewById(i);
                     tv.setBackgroundColor(((i == activeSlot) ? Color.CYAN : Color.WHITE));
@@ -159,10 +187,10 @@ public class StepsLeft extends LinearLayout{
 
                 break;
 
-            //Om udda antal steg
+            //Case 1: Odd number of steps
             case 1:
-                //SET ACTIVE SLOT:
-                //Någon av de första är aktiva
+                //Set the active step
+                //First until middle steps are active
                 if(counter < centerSlot){
                     if(increase){
                         counter++;
@@ -173,12 +201,12 @@ public class StepsLeft extends LinearLayout{
                         activeSlot--;
                     }
 
+                    //Don't decrease if at first step
                     if(counter<1) counter=1;
                     if(activeSlot<0) activeSlot=0;
-                    //Log.i("Första", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
-                //Någon av de sista är aktiva
+                //Last until middle steps are active
                 else if(counter >= (totalSteps-centerSlot)){
                     if(increase){
                         counter++;
@@ -188,19 +216,18 @@ public class StepsLeft extends LinearLayout{
                         counter--;
                         activeSlot = (counter <= totalSteps-centerSlot ? centerSlot : activeSlot-1);
                     }
-                    //Så att den stannar på högsta steget och inte går vidare
+                    //Don't increase if at highest step
                     if (activeSlot > shownSteps-1) activeSlot = shownSteps-1;
                     if (counter > totalSteps) counter = totalSteps;
-                    //Log.i("Sista", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
-                //Den mellersta är aktiv
+                //Middle slot is active
                 else{// if(counter >= (centerSlot) && counter <= (totalSteps-shownSteps+centerSlot)){
                     counter = (increase ? counter+1 : counter-1);
                     activeSlot = (counter > centerSlot ? centerSlot : activeSlot-1);
-                    //Log.i("mellersta", "Counter: " + counter + " activeSlot: " + activeSlot);
                 }
 
+                //Set the correct background color and text to each text view
                 for(int i = 0; i<shownSteps; i++){
                     tv = (TextView) findViewById(i);
                     tv.setBackgroundColor(((i == activeSlot) ? Color.CYAN : Color.WHITE));
@@ -210,6 +237,10 @@ public class StepsLeft extends LinearLayout{
         }
     }
 
+    /**
+     * Method to get which step is the current.
+     * @return curentStep
+     */
     public int getStep() {
         return currentStep;
     }

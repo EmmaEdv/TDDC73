@@ -1,17 +1,9 @@
 package com.example.emmaedv.tddc73_project;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Pair;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -23,15 +15,14 @@ public class MainActivity extends Activity {
     LinearLayout linearLayout;
     LinearLayout contentLayout;
     LinearLayout buttonLayout;
-    //    PasswordStrengthMeter passwordStrengthMeter;
     FirstView firstView;
     SecondView secondView;
     ThirdView thirdView;
     StepsLeft stepsLeft;
     Button next;
     Button prev;
-    List<String> list = Arrays.asList("first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight", "ninth");
-    //    EditText userName;
+    List<String> list = Arrays.asList("first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eight", "ninth", "tenth", "eleventh");
+
     int currentStep = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,22 +40,26 @@ public class MainActivity extends Activity {
 
         buttonLayout = new LinearLayout(this);
         buttonLayout.setOrientation(LinearLayout.HORIZONTAL);
-        //stepsLeft = new StepsLeft(this);
-        stepsLeft = new StepsLeft(this, 6, 9, list);
+
+        //STEPS LEFT
+        //To use default constructor:  stepsLeft = new StepsLeft(this);
+        stepsLeft = new StepsLeft(this, 6, list);
+
+        //VIEWS
         firstView = new FirstView(this);
         secondView = new SecondView(this);
         thirdView = new ThirdView(this);
+
+        //PREVIOUS AND NEXT BUTTONS:
         prev = new Button(this);
         prev.setText("Previous");
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Byt bakgrund och eventuellt text pÃ¥ steps left-objekten
-
-                stepsLeft.decreaseStep();
-                currentStep = stepsLeft.getStep();
-                contentLayout.removeAllViews();
-                checkCurrent(currentStep);
+            stepsLeft.decreaseStep();
+            currentStep = stepsLeft.getStep();
+            contentLayout.removeAllViews();
+            checkCurrent(currentStep);
             }
         });
         next = new Button(this);
@@ -72,11 +67,10 @@ public class MainActivity extends Activity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                stepsLeft.increaseStep();
-                currentStep = stepsLeft.getStep();
-                contentLayout.removeAllViews();
-                checkCurrent(currentStep);
+            stepsLeft.increaseStep();
+            currentStep = stepsLeft.getStep();
+            contentLayout.removeAllViews();
+            checkCurrent(currentStep);
             }
         });
 
@@ -88,9 +82,13 @@ public class MainActivity extends Activity {
         buttonLayout.addView(prev, buttonParams);
         buttonLayout.addView(next, buttonParams);
         linearLayout.addView(buttonLayout);
-
-
     }
+
+    /**
+     *  checkCurrent
+     *  Adds the view for correct step
+     * @param step - current step which is received by getStep function in StepsLeft
+     */
     void checkCurrent (int step){
         switch(step){
             case 1:
@@ -102,7 +100,6 @@ public class MainActivity extends Activity {
             case 3:
                 contentLayout.addView(thirdView);
                 break;
-
         }
     }
 }

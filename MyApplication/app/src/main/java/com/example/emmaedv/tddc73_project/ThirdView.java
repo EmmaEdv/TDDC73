@@ -7,7 +7,6 @@ import android.widget.LinearLayout.LayoutParams;
 
 public class ThirdView extends LinearLayout{
     Context context;
-
     EditText testText;
 
     public ThirdView(Context theContext){
@@ -18,9 +17,8 @@ public class ThirdView extends LinearLayout{
         LinearLayout.LayoutParams layoutParams = (new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 
         testText = new EditText(context);
-//	        testText.addTextChangedListener(watcher);
         testText.setLayoutParams(layoutParams);
-        testText.setText("tredje");
+        testText.setText("Tredje");
         addView(testText);
     }
 

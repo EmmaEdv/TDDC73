@@ -1,14 +1,14 @@
 package com.example.emmaedv.tddc73_project;
 
-import android.util.Pair;
-
 /**
- * Created by emmaedv on 15/01/15.
+ * Interface for a TextProgressBar
  */
 public interface TextProgressBarInterface {
-    void setText(String text);
-
-    void visualizeStrength(Pair<Integer, String> strengthPair);
-
+    /**
+     * Function to set the color of the progressbar
+     * In the interface to get the user an opportunity to chose colors to use
+     * @param strength
+     * @return color
+     */
     int setStrengthColor(int strength);
 }

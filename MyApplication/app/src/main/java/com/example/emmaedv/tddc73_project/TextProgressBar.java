@@ -16,8 +16,12 @@ import android.util.Pair;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+/**
+ * TextProgressBar is a component which includes a progressbar and a string
+ * The progressbar is used to show strength of a password
+ * The string will provide the user feedback of how good the password is
+ */
 public class TextProgressBar extends ProgressBar implements TextProgressBarInterface {
-
     private String text;
     private int textColor = Color.BLACK;
     private float textSize = 30;
@@ -29,23 +33,27 @@ public class TextProgressBar extends ProgressBar implements TextProgressBarInter
     @Override
     protected synchronized void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        //create an instance of class Paint, set color and font size
+        //To set color and font size:
         Paint textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setColor(textColor);
         textPaint.setTextSize(textSize);
-        //In order to show text in a middle, we need to know its size
+
+        // To know the size of the text (useful to position the text)
         Rect bounds = new Rect();
         textPaint.getTextBounds(text, 0, text.length(), bounds);
-        //Now we store font size in bounds variable and can calculate it's position
-        int x = 0;//getWidth();// / 2 - bounds.centerX();
+        int x = 0;
         int y = getHeight()/2+bounds.centerY();
         textPaint.setTextAlign(Paint.Align.LEFT);
-        //drawing text with appropriate color and size in the center
+
+        //Draw text with chosen color and size and alignment
         canvas.drawText(text, x, y, textPaint);
     }
 
-    @Override
+    /**
+     * Set the text of the text progress bar
+     * @param text
+     */
     public synchronized void setText(String text) {
         if (text != null) {
             this.text = text;
@@ -55,15 +63,22 @@ public class TextProgressBar extends ProgressBar implements TextProgressBarInter
         postInvalidate();
     }
 
-    @Override
+    /**
+     * Method to visualize the strength of a password
+     * @param strengthPair
+     */
     public void visualizeStrength(Pair<Integer, String> strengthPair){
-        Log.i("Visualize Strength: ", "styrka: " + strengthPair.first);
+        //Set the color of the bar by using the method setStrengthColor
         getProgressDrawable().setColorFilter(setStrengthColor(strengthPair.first), PorterDuff.Mode.SRC_IN);
         setProgress(strengthPair.first);
         setText(strengthPair.second);
     }
 
     @Override
+    /**
+     * Set the strengthColor.
+     * We use a range from red to green
+     */
     public int setStrengthColor(int strength){
         //Strength: 0-100%
         //Red: 0, yellow: 60, green: 120 -> 0-1.2*strength = 0-120
@@ -71,7 +86,7 @@ public class TextProgressBar extends ProgressBar implements TextProgressBarInter
         hsv[0] = (float) (strength*1.2);
         hsv[1] = 100;
         hsv[2] = 100;
-        Log.i("Color: ", "" + hsv[0]);
+        //Log.i("Color: ", "" + hsv[0]);
         return Color.HSVToColor(hsv);
     }
 }
