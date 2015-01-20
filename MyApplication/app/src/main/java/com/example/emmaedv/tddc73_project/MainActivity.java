@@ -6,10 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
-
 import java.util.Arrays;
 import java.util.List;
-
 
 public class MainActivity extends Activity {
     LinearLayout linearLayout;

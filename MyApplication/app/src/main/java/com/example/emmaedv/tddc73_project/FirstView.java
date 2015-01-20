@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 
 /**
  * FirstView contains a Password Strength Meter and a text field for user name
+ *
+ * @author Johan Dagvall & Emma Edvardsson
  */
 public class FirstView extends LinearLayout {
     Context context;

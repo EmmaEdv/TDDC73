@@ -1,10 +1,6 @@
 package com.example.emmaedv.tddc73_project;
 
-/**
- * Created by emmaedv on 16/12/14.
- */
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,12 +10,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.Pair;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 /**
  * TextProgressBar is a component which includes a progressbar and a string
  * The progressbar is used to show strength of a password
  * The string will provide the user feedback of how good the password is
+ *
+ * @author Johan Dagvall & Emma Edvardsson
  */
 public class TextProgressBar extends ProgressBar implements TextProgressBarInterface {
     private String text;

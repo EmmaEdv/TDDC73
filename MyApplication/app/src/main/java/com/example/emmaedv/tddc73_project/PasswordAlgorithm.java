@@ -2,12 +2,12 @@ package com.example.emmaedv.tddc73_project;
 
 import android.util.Log;
 import android.util.Pair;
-
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * PasswordAlgorithm sets the algorithm which measures the strength of a password.
+ *
  * @author Johan Dagvall & Emma Edvardsson
  */
 public class PasswordAlgorithm implements PasswordAlgorithmInterface {

@@ -2,6 +2,8 @@ package com.example.emmaedv.tddc73_project;
 
 /**
  * Interface for a TextProgressBar
+ *
+ * @author Johan Dagvall & Emma Edvardsson
  */
 public interface TextProgressBarInterface {
     /**

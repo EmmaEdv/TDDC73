@@ -3,8 +3,12 @@ package com.example.emmaedv.tddc73_project;
 import android.content.Context;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
 
+/**
+ * ThirdView contains a text field
+ *
+ * @author Johan Dagvall & Emma Edvardsson
+ */
 public class ThirdView extends LinearLayout{
     Context context;
     EditText testText;

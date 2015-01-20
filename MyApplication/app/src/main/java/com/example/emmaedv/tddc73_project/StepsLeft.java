@@ -5,14 +5,12 @@ import android.graphics.Color;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * StepsLeft: Shows how far a user has come when filling in data over multiple steps
+ *
  * @author Johan Dagvall & Emma Edvardsson
  */
 public class StepsLeft extends LinearLayout{

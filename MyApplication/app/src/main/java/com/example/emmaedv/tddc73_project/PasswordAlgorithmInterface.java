@@ -5,6 +5,8 @@ import android.util.Pair;
 /**
  * An interface to create your own password algorithm.
  * The algorithm is created in the method checkStrength
+ *
+ * @author Johan Dagvall & Emma Edvardsson
  */
 public interface PasswordAlgorithmInterface {
     /**

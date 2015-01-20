@@ -1,18 +1,15 @@
 package com.example.emmaedv.tddc73_project;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.util.Pair;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import java.util.Arrays;
-import java.util.List;
-
+/**
+ * SecondView contains a text field
+ *
+ * @author Johan Dagvall & Emma Edvardsson
+ */
 public class SecondView extends LinearLayout {
     Context context;
     EditText testText;
